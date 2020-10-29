@@ -12,6 +12,7 @@ from rdkit.ML.Descriptors import MoleculeDescriptors
 import pandas as pd
 import numpy as np
 from numpy import inf
+from rdkit.Avalon.pyAvalonTools import GetAvalonFP
 
 #make mol object from smiles
 def mol_from_smiles(smiles):
@@ -35,7 +36,7 @@ def draw_SMILES(smiles):
 
 #default FP function
 def default_FP_Func(m):
-    return AllChem.GetMorganFingerprintAsBitVect(m,2,nBits=512) 
+    return GetAvalonFP(m) 
 
 #fingerprint class
 class Fingerprint:
@@ -60,7 +61,7 @@ class Fingerprint:
                 print("invalid smiles!",smiles)
                 return -1
             fp= self.fp_func(m)
-            fp=fp.ToBitString()
+            #fp=fp.ToBitString()
         
         except:
             print("invalid smiles!", smiles)
@@ -82,7 +83,7 @@ class Fingerprint:
         if pandas_mode:
             df=pd.DataFrame(res_list)
             return df
-        return [self.calc(i) for i in d_list]
+        return res_list
         
         
 
